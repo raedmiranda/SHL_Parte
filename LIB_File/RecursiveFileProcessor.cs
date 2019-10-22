@@ -12,6 +12,7 @@ namespace LIB_File
         private static string CurrentPath { get; set; }
         private static List<string> ExcludeExtensions { get; set; }
         private static List<string> ReplaceFolder { get; set; }
+
         public static List<ProcessedFile> Main(string[] args, string[] exceptions = null, string[] replaces = null)
         {
             if (exceptions != null) ExcludeExtensions = new List<string>(exceptions);
