@@ -13,8 +13,11 @@ namespace CLS_File
         {
             string[] folders = { @"C:\Publicados\Portal_Fact_Elect", @"C:\Publicados\WS_FactElect" };
             string[] excludedext = { @".config", @".datasource" };
-            List<ProcessedFile> files = RecursiveFileProcessor.Main(folders, excludedext);
-            string[] replacefolder = { @"/ilionservices4/" , @"/ILIONX45/custom/ShellMexico/"};
+            string[] replacefolder = { @"/ilionservices4/WS_MX_FACT_ELECT", @"/ILIONX45/custom/ShellMexico/Portal_Facturacion" };
+            List<ProcessedFile> files = RecursiveFileProcessor.Main(folders, excludedext, replacefolder);
+            Console.WriteLine("_-----------------------_");
+            Console.WriteLine("_-----------------------_");
+            files.ForEach(f => Console.WriteLine(f.Path));
         }
     }
 }
