@@ -18,8 +18,8 @@ namespace CLS_File
             try
             {
                 ReadConfig(out Settings data);
-                List<ProcessedFile> files = RecursiveFileProcessor.Main(data.Folders, data.ExcludedExt, data.ReplaceFolder);
-                //.ForEach(f => Console.WriteLine(f.Path));
+                List<ProcessedFile> files = RecursiveFileProcessor.Process(data);
+                //files.ForEach(f => Console.WriteLine(f.Path));
                 files.ForEach(f => clipData.AppendLine(f.Path + "\t" + "\t" + "\t" + f.Extension));
                 Clipboard.SetDataObject(clipData.ToString(), true);
             }

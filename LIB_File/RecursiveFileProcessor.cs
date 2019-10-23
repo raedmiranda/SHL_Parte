@@ -1,6 +1,4 @@
-﻿// For Directory.GetFiles and Directory.GetDirectories
-// For File.Exists, Directory.Exists
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 
@@ -9,18 +7,17 @@ namespace LIB_File
     public static class RecursiveFileProcessor
     {
         private static string CurrentPath { get; set; }
-        private static List<string> ExcludeExtensions { get; set; }
-        private static List<string> ReplaceFolder { get; set; }
+        private static Settings Settings = new Settings();
 
-        public static List<ProcessedFile> Main(List<string> args, List<string> exceptions = null, List<string> replaces = null)
+        public static List<ProcessedFile> Process(Settings _settings)
         {
-            if (exceptions != null) ExcludeExtensions = exceptions;
-            if (replaces != null) ReplaceFolder = replaces;
+            if (_settings.ExcludedExt != null) Settings.ExcludedExt = _settings.ExcludedExt;
+            if (_settings.ReplaceFolder != null) Settings.ReplaceFolder = _settings.ReplaceFolder;
 
             List<ProcessedFile> files = new List<ProcessedFile>();
             int i = 0;
 
-            foreach (string path in args)
+            foreach (string path in _settings.Folders)
             {
                 CurrentPath = path;
                 if (File.Exists(path)) files.Add(ProcessFile(path, i));// This path is a file
@@ -60,10 +57,10 @@ namespace LIB_File
             ProcessedFile file = new ProcessedFile
             {
                 Extension = Path.GetExtension(path).ToUpper().Replace(".", ""),
-                Path = path.Replace(CurrentPath, ReplaceFolder[package]).Replace(@"\", @"/"),
+                Path = path.Replace(CurrentPath, Settings.ReplaceFolder[package]).Replace(@"\", @"/"),
                 Package = package
             };
-            return ExcludeExtensions.Contains("." + file.Extension.ToLower()) ? null : file;
+            return Settings.ExcludedExt.Contains("." + file.Extension.ToLower()) ? null : file;
         }
     }
 }
