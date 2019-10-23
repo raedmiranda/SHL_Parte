@@ -17,7 +17,7 @@ namespace CLS_File
 
             try
             {
-                ReadConfig(out Data data);
+                ReadConfig(out Settings data);
                 List<ProcessedFile> files = RecursiveFileProcessor.Main(data.Folders, data.ExcludedExt, data.ReplaceFolder);
                 //.ForEach(f => Console.WriteLine(f.Path));
                 files.ForEach(f => clipData.AppendLine(f.Path + "\t" + "\t" + "\t" + f.Extension));
@@ -34,13 +34,13 @@ namespace CLS_File
             }
         }
 
-        private static void ReadConfig(out Data data)
+        private static void ReadConfig(out Settings data)
         {
             try
             {
                 string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, "data.json");
                 string jsonString = new StreamReader(path).ReadToEnd();
-                data = new JavaScriptSerializer().Deserialize<Data>(jsonString);
+                data = new JavaScriptSerializer().Deserialize<Settings>(jsonString);
             }
             catch (Exception ex)
             {
