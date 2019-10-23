@@ -1,30 +1,26 @@
 ﻿using LIB_File;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace CLS_File
 {
     class Program
     {
-        [STAThreadAttribute]
+        [STAThread]
         static void Main(string[] args)
         {
-            string[] folders = { @"C:\Publicados\Portal_Fact_Elect", @"C:\Publicados\WS_FactElect" };
-            string[] excludedext = { @".config", @".datasource" };
-            string[] replacefolder = { @"/ilionservices4/WS_MX_FACT_ELECT", @"/ILIONX45/custom/ShellMexico/Portal_Facturacion" };
-            List<ProcessedFile> files = RecursiveFileProcessor.Main(folders, excludedext, replacefolder);
-            Console.WriteLine("_-----------------------_");
-            Console.WriteLine("_-----------------------_");
-            files.ForEach(f => Console.WriteLine(f.Path));
             StringBuilder clipData = new StringBuilder();
 
             try
             {
-                files.ForEach(f => clipData.AppendLine(f.Path));
+                ReadConfig(out Data data);
+                List<ProcessedFile> files = RecursiveFileProcessor.Main(data.Folders, data.ExcludedExt, data.ReplaceFolder);
+                //.ForEach(f => Console.WriteLine(f.Path));
+                files.ForEach(f => clipData.AppendLine(f.Path + "\t" + "\t" + "\t" + f.Extension));
                 Clipboard.SetDataObject(clipData.ToString(), true);
             }
             catch (ArgumentNullException ex)
@@ -35,6 +31,20 @@ namespace CLS_File
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static void ReadConfig(out Data data)
+        {
+            try
+            {
+                string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, "data.json");
+                string jsonString = new StreamReader(path).ReadToEnd();
+                data = new JavaScriptSerializer().Deserialize<Data>(jsonString);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

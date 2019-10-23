@@ -2,7 +2,6 @@
 // For File.Exists, Directory.Exists
 using System;
 using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace LIB_File
@@ -13,7 +12,7 @@ namespace LIB_File
         private static List<string> ExcludeExtensions { get; set; }
         private static List<string> ReplaceFolder { get; set; }
 
-        public static List<ProcessedFile> Main(string[] args, string[] exceptions = null, string[] replaces = null)
+        public static List<ProcessedFile> Main(List<string> args, List<string> exceptions = null, List<string> replaces = null)
         {
             if (exceptions != null) ExcludeExtensions = new List<string>(exceptions);
             if (replaces != null) ReplaceFolder = new List<string>(replaces);
@@ -36,7 +35,7 @@ namespace LIB_File
                 }
                 else
                 {
-                    Console.WriteLine("{0} is not a valid file or directory.", path);
+                    throw new Exception(path + " is not a valid file or directory.");
                 }
                 i++;
             }
@@ -66,16 +65,16 @@ namespace LIB_File
             return files;
         }
 
-        // Insert logic for processing found files here.
+        // Logic inserted for processing found files here.
         public static ProcessedFile ProcessFile(string path, int package = 0)
         {
-            ProcessedFile file = new ProcessedFile();
-            file.Extension = Path.GetExtension(path);
-            file.Path = path.Replace(CurrentPath, ReplaceFolder[package]).Replace(@"\", @"/");
-            file.Package = package;
-
-            Console.WriteLine("Processed file '{0}'.", path);
-            return ExcludeExtensions.Contains(file.Extension) ? null : file;
+            ProcessedFile file = new ProcessedFile
+            {
+                Extension = Path.GetExtension(path).ToUpper().Replace(".", ""),
+                Path = path.Replace(CurrentPath, ReplaceFolder[package]).Replace(@"\", @"/"),
+                Package = package
+            };
+            return ExcludeExtensions.Contains("." + file.Extension.ToLower()) ? null : file;
         }
     }
 }

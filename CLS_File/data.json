@@ -1,0 +1,13 @@
+{
+    "Folders" : [
+        "C:\\Publicados\\Portal_Fact_Elect",
+        "C:\\Publicados\\WS_FactElect"
+    ],
+    "ExcludedExt":[
+        ".config", ".datasource"
+    ],
+    "ReplaceFolder":[
+        "/ilionservices4/WS_MX_FACT_ELECT", 
+        "/ILIONX45/custom/ShellMexico/Portal_Facturacion"
+    ]
+}
